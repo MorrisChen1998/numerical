@@ -3,7 +3,7 @@
 #include <time.h>
 #include <math.h>
 
-#define ERROR_TOLERANCE 1e-4
+#define ERROR_TOLERANCE 1e-6
 #define MAX_ITERATION 100
 #define MAX_TEST_INTERATION(n) ((int)pow(10, n))
 
@@ -18,7 +18,7 @@ float abs_f(float n) {
 float randNum() {
 	float integer = rand(rand()) % 1000;
 	float fraction = rand(rand()) % 1000;
-	fraction == 0 ? fraction : 1 / fraction;
+	fraction = fraction == 0 ? fraction : 1 / fraction;
 	
 	return integer + fraction;
 }
@@ -77,17 +77,19 @@ float sqrtMagic(float n) {
 }
 
 int main() {
-	
-	float input = 36.0;
-	printf("computing the root of the value: %f...\n", input);
-	float library = sqrt(input);
-	printf("C library sqrt:\n%.20llf\n", library);
-	float newton = sqrtNewton(input);
-	printf("newton's method sqrt:\n%.20llf, error = %.20llf\n", newton, newton - library);
-	float binarySearch = sqrtBinarySearch(input);
-	printf("binary search method sqrt:\n%.20llf, error = %.20llf\n", binarySearch, binarySearch - library);
-	float magic = sqrtMagic(input);
-	printf("fast & magical sqrt:\n%.20f, error = %.20f\n", magic, magic - library);
+	float inputs[4] = { 0, 36.0, 2.25, 0.01 };
+	float input, library, newton, binarySearch, magic;
+	for (int i = 0; i < 4; i++) {
+		printf("\ncomputing the root of the value: %f...\n", inputs[i]);
+		library = sqrt(inputs[i]);
+		printf("C library sqrt:\n%.20llf\n", library);
+		newton = sqrtNewton(inputs[i]);
+		printf("newton's method sqrt:\n%.20llf, error = %.20llf\n", newton, newton - library);
+		binarySearch = sqrtBinarySearch(inputs[i]);
+		printf("binary search method sqrt:\n%.20llf, error = %.20llf\n", binarySearch, binarySearch - library);
+		magic = sqrtMagic(inputs[i]);
+		printf("fast & magical sqrt:\n%.20f, error = %.20f\n", magic, magic - library);
+	}
 
 	int test_num = 6;//10^(test_num)
 	clock_t t1, t2;
